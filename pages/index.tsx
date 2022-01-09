@@ -1,14 +1,51 @@
+import { useState } from "react";
 import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
+
+type Difficulty = "easy" | "hard";
 
 const Home: NextPage = () => {
-  const createFraction = () => {};
+  const getRandomInt = (max: number) => {
+    const randomInt = Math.ceil(Math.random() * max);
+    return randomInt;
+  };
+
+  const createFraction = (difficulty: Difficulty) => {
+    let denominator!: number;
+    if (difficulty === "easy") {
+      // denominator of 2-12
+      denominator = getRandomInt(11) + 1;
+    }
+    const numerator = getRandomInt(denominator - 1);
+    console.log([numerator, denominator]);
+    return [numerator, denominator];
+  };
+
+  const [fraction1, setFraction1] = useState<number[]>([]);
+  const [fraction2, setFraction2] = useState<number[]>([]);
+
+  const setFractions = () => {
+    const f1 = createFraction("easy");
+    const f2 = createFraction("easy");
+    setFraction1(f1);
+    setFraction2(f2);
+  };
 
   return (
     <div className="min-h-screen">
-      <div className="flex flex-1 h-full items-center border border-yellow-200">
-        hello
+      <div className="flex flex-col h-screen items-center justify-center">
+        <button onClick={() => setFractions()}>Get Fractions</button>
+        <div className="flex w-full justify-center space-x-24 p-12">
+          {fraction1?.length > 0 && (
+            <div>
+              {fraction1[0]} / {fraction1[1]}
+            </div>
+          )}
+          {fraction2?.length > 0 && (
+            <div>
+              {fraction2[0]} / {fraction2[1]}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
