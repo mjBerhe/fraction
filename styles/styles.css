@@ -7,6 +7,6 @@
   margin: 0;
   padding: 0;
   font-family: "PT Sans", sans-serif;
-  /* @apply text-white; */
-  @apply bg-gray-300
+  @apply text-white;
+  @apply bg-gray-700;
 }
