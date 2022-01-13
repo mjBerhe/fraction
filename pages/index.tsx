@@ -4,6 +4,7 @@ import type { NextPage } from "next";
 import FractionButton from "../components/FractionButton";
 
 type Difficulty = "easy" | "hard";
+type ReturnVoid = () => void;
 
 const getRandomInt = (max: number) => {
   const randomInt = Math.ceil(Math.random() * max);
@@ -40,18 +41,18 @@ const Home: NextPage = () => {
   const [wasCorrect, setWasCorrect] = useState<boolean>(false);
   const [currentStreak, setCurrentStreak] = useState<number>(0);
 
-  const setFractions = (): void => {
+  const setFractions: ReturnVoid = () => {
     const [f1, f2] = createFractionPair("easy");
     setFraction1(f1);
     setFraction2(f2);
   };
 
-  const isCorrect = () => {
+  const isCorrect: ReturnVoid = () => {
     setCurrentStreak((prev) => prev + 1);
     setWasCorrect(true);
   };
 
-  const isIncorrect = () => {
+  const isIncorrect: ReturnVoid = () => {
     setCurrentStreak(0);
     setWasCorrect(false);
   };
@@ -60,15 +61,27 @@ const Home: NextPage = () => {
     // console.log(answer);
     if (answer === fraction1) {
       if (fraction1[0] / fraction1[1] > fraction2[0] / fraction2[1]) {
+        console.log(
+          `Correct! ${fraction1[0]}/${fraction1[1]} > ${fraction2[0]}/${fraction2[1]}`
+        );
         isCorrect();
       } else {
+        console.log(
+          `Incorrect! ${fraction1[0]}/${fraction1[1]} < ${fraction2[0]}/${fraction2[1]}`
+        );
         isIncorrect();
       }
     }
     if (answer === fraction2) {
       if (fraction2[0] / fraction2[1] > fraction1[0] / fraction1[1]) {
+        console.log(
+          `Correct! ${fraction2[0]}/${fraction2[1]} > ${fraction1[0]}/${fraction1[1]}`
+        );
         isCorrect();
       } else {
+        console.log(
+          `Incorrect! ${fraction2[0]}/${fraction2[1]} < ${fraction1[0]}/${fraction1[1]}`
+        );
         isIncorrect();
       }
     }
@@ -91,12 +104,20 @@ const Home: NextPage = () => {
         {!wasCorrect && (
           <span className="text-red-600 font-bold text-2xl">Incorrect!</span>
         )}
-        <div className="flex w-full justify-center space-x-12 p-12">
+        <div className="flex w-full justify-center items-center space-x-12 h-56">
           {fraction1?.length > 0 && (
-            <FractionButton handleClick={submitAnswer} fraction={fraction1} />
+            <FractionButton
+              handleClick={submitAnswer}
+              fraction={fraction1}
+              triggerKey="ArrowLeft"
+            />
           )}
           {fraction2?.length > 0 && (
-            <FractionButton handleClick={submitAnswer} fraction={fraction2} />
+            <FractionButton
+              handleClick={submitAnswer}
+              fraction={fraction2}
+              triggerKey="ArrowRight"
+            />
           )}
         </div>
       </div>
