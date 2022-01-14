@@ -11,6 +11,9 @@ const oneMinute = new Date();
 oneMinute.setSeconds(oneMinute.getSeconds() + 60);
 
 const MinuteMode: React.FC<Props> = ({ resetMode }) => {
+  const [gameRunning, setGameRunning] = useState<boolean>(false);
+  const [tryAgain, setTryAgain] = useState<boolean>(false);
+
   const {
     seconds,
     minutes,
@@ -23,17 +26,29 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
     restart,
   } = useTimer({
     expiryTimestamp: oneMinute,
-    autoStart: true,
+    autoStart: false,
     onExpire: () => console.log("Timer done"),
   });
 
   useEffect(() => {
-    return () => {
-      restart(oneMinute, true);
-    };
-  }, []);
+    if (gameRunning) {
+      // start();
+      const time = new Date();
+      time.setSeconds(time.getSeconds() + 60);
+      restart(time, true);
+    }
+  }, [gameRunning]);
 
-  const [startGame, setStartGame] = useState<boolean>(false);
+  const startGame = () => {
+    setTryAgain(false);
+    setGameRunning(true);
+  };
+
+  const onIncorrect = () => {
+    setGameRunning(false);
+    setTryAgain(true);
+    console.log("finish game");
+  };
 
   return (
     <div className="flex flex-col h-screen">
@@ -44,31 +59,41 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
       </div>
 
       <div className="flex flex-col flex-1 items-center justify-center">
-        {!startGame && (
+        {!gameRunning && !tryAgain && (
           <div className="flex flex-col items-center space-y-8">
             <span className="text-xl">
               Answer as many questions correctly before the timer hits 0
             </span>
             <button
               type="button"
-              onClick={() => setStartGame(true)}
+              onClick={startGame}
               className="border border-white py-2 px-4 rounded-lg shadow"
             >
               Start
             </button>
           </div>
         )}
-        {startGame && (
-          <div>
-            {/* <div className="flex">
-          <button onClick={start}>Start</button>
-          <button onClick={pause}>Pause</button>
-          <button onClick={resume}>Resume</button>
-        </div> */}
-            <div className="text-2xl">
-              {minutes} : {seconds === 0 ? "00" : seconds}
+        {gameRunning && (
+          <div className="flex flex-col flex-1 w-full">
+            <div className="flex justify-center mt-12 text-5xl">
+              {minutes} : {seconds < 10 ? `0${seconds}` : seconds}
             </div>
-            <FractionBase />
+            <FractionBase onIncorrect={onIncorrect} />
+          </div>
+        )}
+        {tryAgain && (
+          <div className="flex flex-col items-center">
+            <span className="font-bold text-red-500 text-7xl sm:text-8xl">
+              WRONG
+            </span>
+            <span className="mt-2 text-base">Do better next time</span>
+            <button
+              type="button"
+              onClick={startGame}
+              className="mt-12 border border-white py-2 px-4 rounded-lg shadow"
+            >
+              Try Again
+            </button>
           </div>
         )}
       </div>
