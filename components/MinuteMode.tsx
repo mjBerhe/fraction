@@ -60,17 +60,21 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
 
       <div className="flex flex-col flex-1 items-center justify-center">
         {!gameRunning && !tryAgain && (
-          <div className="flex flex-col items-center space-y-8">
-            <span className="text-xl">
-              Answer as many questions correctly before the timer hits 0
-            </span>
-            <button
-              type="button"
-              onClick={startGame}
-              className="border border-white py-2 px-4 rounded-lg shadow"
-            >
-              Start
-            </button>
+          <div className="flex flex-col flex-1 items-center space-y-8 mb-16">
+            <div className="flex flex-col mt-20 p-4 border-2 border-white w-96">
+              <span className="text-xl font-bold mb-4">RULES</span>
+              <span className="text-lg">1. Select the larger fraction</span>
+              <span className="text-lg">2. Be fast</span>
+            </div>
+            <div className="flex flex-1 items-center justify-center">
+              <button
+                type="button"
+                onClick={startGame}
+                className="bg-gray-800 py-4 px-12 rounded-xl shadow-lg text-3xl hover:bg-opacity-80"
+              >
+                PLAY
+              </button>
+            </div>
           </div>
         )}
         {gameRunning && (
@@ -87,13 +91,15 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
               WRONG
             </span>
             <span className="mt-2 text-base">Do better next time</span>
-            <button
-              type="button"
-              onClick={startGame}
-              className="mt-12 border border-white py-2 px-4 rounded-lg shadow"
-            >
-              Try Again
-            </button>
+            <div className="mt-24">
+              <button
+                type="button"
+                onClick={startGame}
+                className="bg-gray-800 py-4 px-12 rounded-xl shadow-lg text-3xl hover:bg-opacity-80"
+              >
+                Try Again
+              </button>
+            </div>
           </div>
         )}
       </div>

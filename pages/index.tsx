@@ -22,7 +22,7 @@ const Home: NextPage = () => {
               <button
                 type="button"
                 onClick={() => setMode("MinuteMode")}
-                className="border border-white py-2 px-4 rounded-lg shadow"
+                className="bg-gray-800 py-4 px-12 rounded-xl shadow-lg text-3xl hover:bg-opacity-80"
               >
                 Speed Test
               </button>
