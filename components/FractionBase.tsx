@@ -4,12 +4,13 @@ import FractionButton from "./FractionButton";
 
 interface Props {
   test?: string;
+  onCorrect: () => void;
   onIncorrect: () => void;
 }
 
 type ReturnVoid = () => void;
 
-const FractionBase: React.FC<Props> = ({ onIncorrect }) => {
+const FractionBase: React.FC<Props> = ({ onCorrect, onIncorrect }) => {
   const [fraction1, setFraction1] = useState<number[]>([]);
   const [fraction2, setFraction2] = useState<number[]>([]);
   const [wasCorrect, setWasCorrect] = useState<boolean | null>(null);
@@ -22,6 +23,7 @@ const FractionBase: React.FC<Props> = ({ onIncorrect }) => {
   };
 
   const isCorrect: ReturnVoid = () => {
+    onCorrect();
     setCurrentStreak((prev) => prev + 1);
     setWasCorrect(true);
   };
