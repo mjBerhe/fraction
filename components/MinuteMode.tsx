@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { useTimer } from "react-timer-hook";
 import FractionBase from "./FractionBase";
 
@@ -69,10 +70,11 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="flex">
-        <button onClick={resetMode} className="p-2">
+      <div className="flex p-4 space-x-6">
+        <button onClick={resetMode} className="">
           Home
         </button>
+        <Link href="/highscores">Highscores</Link>
       </div>
 
       <div className="flex flex-col flex-1 items-center justify-center">

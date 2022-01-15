@@ -1,11 +1,11 @@
-import { SubmitScore } from "@prisma/client";
+import { Scores } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../lib/prisma";
 
 type Data = {
   name?: string;
   error?: string;
-  scores?: SubmitScore[] | undefined;
+  scores?: Scores[] | undefined;
 };
 
 export default async function handler(
@@ -16,7 +16,7 @@ export default async function handler(
 
   if (method === "GET") {
     try {
-      const scores: SubmitScore[] = await prisma.submitScore.findMany();
+      const scores: Scores[] = await prisma.scores.findMany();
       res.status(200).json({ scores });
     } catch (error) {
       console.error(error);

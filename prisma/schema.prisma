@@ -13,7 +13,7 @@ datasource db {
   referentialIntegrity = "prisma"
 }
 
-model SubmitScore {
+model Scores {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
 

@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE `SubmitScore` (
+CREATE TABLE `Scores` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `gameMode` VARCHAR(191) NOT NULL,
