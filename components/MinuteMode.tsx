@@ -64,8 +64,20 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
     setCurrentStreak((prev) => prev + 1);
   };
 
-  const submitScore = () => {
+  const submitScore = async () => {
     console.log("todo");
+    const test = await fetch("http://localhost:3000/api/submitScore", {
+      body: JSON.stringify({
+        username: "TestName",
+        gameMode: "SpeedTest",
+        score: currentStreak,
+      }),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(test);
   };
 
   return (
