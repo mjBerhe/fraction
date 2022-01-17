@@ -78,6 +78,7 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
         });
         console.log(test);
         if (test.ok) {
+          console.log("going to highscores");
           router.push("/highscores");
         }
       } else {
