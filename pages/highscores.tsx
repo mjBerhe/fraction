@@ -9,7 +9,7 @@ interface Props {
   scores: Scores[];
 }
 
-const Highscores = (props: Props) => {
+const Highscores: NextPage<Props> = (props: Props) => {
   const { scores } = props;
   return (
     <div className="flex flex-col h-screen">
