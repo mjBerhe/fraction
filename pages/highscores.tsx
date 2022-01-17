@@ -1,3 +1,4 @@
+import React from "react";
 import type { NextPage } from "next";
 import { GetStaticProps } from "next";
 import Link from "next/link";
@@ -9,7 +10,7 @@ interface Props {
   scores: Scores[];
 }
 
-const Highscores: NextPage<Props> = (props: Props) => {
+const Highscores: React.FC<Props> = (props) => {
   const { scores } = props;
   return (
     <div className="flex flex-col h-screen">
