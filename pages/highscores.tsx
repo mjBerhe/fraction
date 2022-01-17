@@ -43,18 +43,18 @@ const Highscores: React.FC<Props> = (props) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
-  const scores = await prisma.scores.findMany({
-    select: {
-      username: true,
-      score: true,
-      gameMode: true,
-    },
-  });
+// export const getStaticProps: GetStaticProps = async () => {
+//   const scores = await prisma.scores.findMany({
+//     select: {
+//       username: true,
+//       score: true,
+//       gameMode: true,
+//     },
+//   });
 
-  return {
-    props: { scores },
-  };
-};
+//   return {
+//     props: { scores },
+//   };
+// };
 
 export default Highscores;
