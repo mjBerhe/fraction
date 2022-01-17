@@ -11,6 +11,7 @@ interface Props {
 }
 
 const Highscores: React.FC<Props> = (props) => {
+  console.log(props);
   const { scores } = props;
   return (
     <div className="flex flex-col h-screen">
