@@ -7,7 +7,7 @@ import { prisma } from "../lib/prisma";
 import { Scores } from "@prisma/client";
 
 interface Props {
-  scores: Scores[];
+  scores?: Scores[];
 }
 
 const Highscores: React.FC<Props> = (props) => {
@@ -28,8 +28,8 @@ const Highscores: React.FC<Props> = (props) => {
               <span className="w-1/3 text-lg">Score</span>
             </div>
             {scores
-              .sort((a, b) => b.score - a.score)
-              .map((score, i) => (
+              ?.sort((a, b) => b.score - a.score)
+              ?.map((score, i) => (
                 <div key={score.id} className="flex w-full py-2">
                   <span className="w-1/3 text-lg">{i + 1}</span>
                   <span className="w-1/3 text-lg">{score.username}</span>
@@ -44,7 +44,7 @@ const Highscores: React.FC<Props> = (props) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const scores = await prisma?.scores.findMany({
+  const scores = await prisma.scores.findMany({
     select: {
       username: true,
       score: true,
