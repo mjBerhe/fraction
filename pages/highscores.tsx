@@ -1,5 +1,5 @@
 import React from "react";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { GetStaticProps } from "next";
 import Link from "next/link";
 
@@ -43,18 +43,18 @@ const Highscores: React.FC<Props> = (props) => {
   );
 };
 
-// export const getStaticProps: GetStaticProps = async () => {
-//   const scores = await prisma.scores.findMany({
-//     select: {
-//       username: true,
-//       score: true,
-//       gameMode: true,
-//     },
-//   });
+export const getStaticProps: GetServerSideProps = async () => {
+  const scores = await prisma.scores.findMany({
+    select: {
+      username: true,
+      score: true,
+      gameMode: true,
+    },
+  });
 
-//   return {
-//     props: { scores },
-//   };
-// };
+  return {
+    props: { scores },
+  };
+};
 
 export default Highscores;
