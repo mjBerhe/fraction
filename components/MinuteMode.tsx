@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useTimer } from "react-timer-hook";
 import FractionBase from "./FractionBase";
 
@@ -17,21 +18,17 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
   const [gameCompleted, setGameCompleted] = useState<boolean>(false);
   const [currentStreak, setCurrentStreak] = useState<number>(0);
 
-  const {
-    seconds,
-    minutes,
-    hours,
-    days,
-    isRunning,
-    start,
-    pause,
-    resume,
-    restart,
-  } = useTimer({
-    expiryTimestamp: oneMinute,
-    autoStart: false,
-    onExpire: () => finishGame(),
-  });
+  const [username, setUsername] = useState<string>("");
+  const [nameError, setNameError] = useState<boolean>(false);
+
+  const router = useRouter();
+
+  const { seconds, minutes, isRunning, start, pause, resume, restart } =
+    useTimer({
+      expiryTimestamp: oneMinute,
+      autoStart: false,
+      onExpire: () => finishGame(),
+    });
 
   useEffect(() => {
     if (gameRunning) {
@@ -56,6 +53,7 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
   };
 
   const onIncorrect = () => {
+    pause();
     setGameRunning(false);
     setTryAgain(true);
   };
@@ -65,19 +63,29 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
   };
 
   const submitScore = async () => {
-    console.log("todo");
-    const test = await fetch("http://localhost:3000/api/submitScore", {
-      body: JSON.stringify({
-        username: "TestName",
-        gameMode: "SpeedTest",
-        score: currentStreak,
-      }),
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    console.log(test);
+    try {
+      if (username !== "") {
+        const test = await fetch("http://localhost:3000/api/submitScore", {
+          body: JSON.stringify({
+            username: username,
+            gameMode: "SpeedTest",
+            score: currentStreak,
+          }),
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        console.log(test);
+        if (test.ok) {
+          router.push("/highscores");
+        }
+      } else {
+        setNameError(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -143,21 +151,33 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
               <strong className="text-green-500">{currentStreak}</strong>{" "}
               answers correct
             </span>
-            <div className="mt-24 flex space-x-4">
-              <button
-                type="button"
-                onClick={submitScore}
-                className="bg-gray-800 py-4 px-12 rounded-xl shadow-lg text-3xl hover:bg-opacity-80"
-              >
-                Submit Score
-              </button>
-              <button
-                type="button"
-                onClick={startGame}
-                className="bg-gray-800 py-4 px-12 rounded-xl shadow-lg text-3xl hover:bg-opacity-80"
-              >
-                Try Again
-              </button>
+            <div className="flex flex-col space-y-4 mt-20">
+              <input
+                type="text"
+                placeholder="Enter Name"
+                className={`outline-none h-10 px-3 rounded-lg border-2 ${
+                  nameError ? "border-red-500" : "border-white"
+                }`}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <div className="flex space-x-4">
+                <button
+                  type="button"
+                  onClick={submitScore}
+                  className="bg-gray-800 py-4 px-12 rounded-xl shadow-lg text-3xl hover:bg-opacity-80"
+                >
+                  Submit Score
+                </button>
+
+                <button
+                  type="button"
+                  onClick={startGame}
+                  className="bg-gray-800 py-4 px-12 rounded-xl shadow-lg text-3xl hover:bg-opacity-80"
+                >
+                  Try Again
+                </button>
+              </div>
             </div>
           </div>
         )}
