@@ -1,22 +1,15 @@
-import { Scores } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../lib/prisma";
 
-type Data = {
-  name?: string;
-  error?: string;
-  scores?: Scores[] | undefined;
-};
-
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse
 ) {
   const { method } = req;
 
   if (method === "GET") {
     try {
-      const scores: Scores[] = await prisma.scores.findMany();
+      const scores = await prisma.scores.findMany();
       res.status(200).json({ scores });
     } catch (error) {
       console.error(error);
