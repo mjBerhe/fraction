@@ -72,6 +72,7 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
   const [tryAgain, setTryAgain] = useState<boolean>(false);
   const [gameCompleted, setGameCompleted] = useState<boolean>(false);
   const [currentStreak, setCurrentStreak] = useState<number>(0);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [incorrectMessage, setIncorrectMessage] = useState<string>("");
   const [username, setUsername] = useState<string>("");
@@ -124,6 +125,7 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
   const submitScore = async () => {
     try {
       if (username !== "") {
+        setIsSubmitting(true);
         const test = await fetch("/api/submitScore", {
           body: JSON.stringify({
             username: username,
@@ -233,7 +235,8 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
                 <button
                   type="button"
                   onClick={submitScore}
-                  className="bg-gray-800 py-4 px-12 rounded-xl shadow-lg text-3xl hover:bg-opacity-80"
+                  className="bg-gray-800 py-4 px-12 rounded-xl shadow-lg text-3xl hover:bg-opacity-80 disabled:opacity-50"
+                  disabled={isSubmitting}
                 >
                   Submit Score
                 </button>
