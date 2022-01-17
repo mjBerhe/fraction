@@ -43,7 +43,7 @@ const Highscores: React.FC<Props> = (props) => {
   );
 };
 
-export const getStaticProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const scores = await prisma.scores.findMany({
     select: {
       username: true,
