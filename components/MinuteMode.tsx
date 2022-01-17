@@ -65,7 +65,7 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
   const submitScore = async () => {
     try {
       if (username !== "") {
-        const test = await fetch("http://localhost:3000/api/submitScore", {
+        const test = await fetch("/api/submitScore", {
           body: JSON.stringify({
             username: username,
             gameMode: "SpeedTest",
