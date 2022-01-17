@@ -11,8 +11,10 @@ interface Props {
 }
 
 const Highscores: React.FC<Props> = (props) => {
-  console.log(props);
   const { scores } = props;
+
+  const headingClass = "w-1/3 text-lg font-bold bg-gray-400 text-black";
+
   return (
     <div className="flex flex-col h-screen">
       <div className="flex p-4 space-x-6">
@@ -20,13 +22,15 @@ const Highscores: React.FC<Props> = (props) => {
         <Link href="/highscores">Highscores</Link>
       </div>
       <div className="flex flex-col items-center">
-        <div className="max-w-2xl w-full mx-auto text-center border border-white">
+        <div className="max-w-2xl w-full mx-auto text-center border-2 border-white">
           <div className="flex flex-col">
-            <h2 className="text-2xl font-bold p-2">Speed Test</h2>
-            <div className="flex w-full py-2">
-              <span className="w-1/3 text-lg">Rank</span>
-              <span className="w-1/3 text-lg">Name</span>
-              <span className="w-1/3 text-lg">Score</span>
+            <h2 className="text-3xl font-bold p-2 bg-gray-300 text-black">
+              Speed Test
+            </h2>
+            <div className="flex w-full py-2 bg-gray-300">
+              <span className={headingClass}>Rank</span>
+              <span className={headingClass}>Name</span>
+              <span className={headingClass}>Score</span>
             </div>
             {scores
               ?.sort((a, b) => b.score - a.score)

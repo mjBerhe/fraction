@@ -10,7 +10,62 @@ interface Props {
 }
 
 const oneMinute = new Date();
-oneMinute.setSeconds(oneMinute.getSeconds() + 60);
+oneMinute.setSeconds(oneMinute.getSeconds() + 30);
+
+const incorrectMessages = {
+  none: [
+    "Yikes",
+    "Can't do any worse... right?",
+    "Remember, the goal of the game is to pick the LARGER fraction",
+    "Don't worry, I won't tell anyone about this",
+    "Maybe this game isn't for you",
+  ],
+  bad: [
+    "Do better next time",
+    "What was that??",
+    "Must have been a misclick... right?",
+    "Time to pick up the pace",
+  ],
+  decent: [
+    "Not the worst I've seen",
+    "C'mon, I know you can do better than that",
+    "Decent, try to answer correctly next time",
+    "We're getting somewhere",
+  ],
+  good: [
+    "Wow, now if only you got that last one right",
+    "Not too bad",
+    "Keep trying!",
+    "Don't get frustated",
+    "So close! yet so far...",
+    "That was pretty good... until it wasn't",
+  ],
+};
+
+const getRandomInt = (max: number) => {
+  const randomInt = Math.floor(Math.random() * max);
+  return randomInt;
+};
+
+const generateIncorrectMessage = (numCorrect: number) => {
+  if (numCorrect === 0) {
+    const randomNum = getRandomInt(incorrectMessages.none.length);
+    return incorrectMessages.none[randomNum];
+  }
+  if (numCorrect > 0 && numCorrect <= 5) {
+    const randomNum = getRandomInt(incorrectMessages.bad.length);
+    return incorrectMessages.bad[randomNum];
+  }
+  if (numCorrect > 5 && numCorrect <= 15) {
+    const randomNum = getRandomInt(incorrectMessages.decent.length);
+    return incorrectMessages.decent[randomNum];
+  }
+  if (numCorrect > 15) {
+    const randomNum = getRandomInt(incorrectMessages.good.length);
+    return incorrectMessages.good[randomNum];
+  }
+  return "It must be a glitch";
+};
 
 const MinuteMode: React.FC<Props> = ({ resetMode }) => {
   const [gameRunning, setGameRunning] = useState<boolean>(false);
@@ -18,6 +73,7 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
   const [gameCompleted, setGameCompleted] = useState<boolean>(false);
   const [currentStreak, setCurrentStreak] = useState<number>(0);
 
+  const [incorrectMessage, setIncorrectMessage] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [nameError, setNameError] = useState<boolean>(false);
 
@@ -34,7 +90,7 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
     if (gameRunning) {
       // start();
       const time = new Date();
-      time.setSeconds(time.getSeconds() + 10);
+      time.setSeconds(time.getSeconds() + 30);
       restart(time, true);
     }
   }, [gameRunning]);
@@ -53,9 +109,12 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
   };
 
   const onIncorrect = () => {
+    setIncorrectMessage(generateIncorrectMessage(currentStreak));
     pause();
     setGameRunning(false);
     setTryAgain(true);
+
+    console.log(currentStreak);
   };
 
   const onCorrect = () => {
@@ -101,10 +160,18 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
       <div className="flex flex-col flex-1 items-center justify-center">
         {!gameRunning && !tryAgain && !gameCompleted && (
           <div className="flex flex-col flex-1 items-center space-y-8 mb-16">
-            <div className="flex flex-col mt-20 p-4 border-2 border-white w-96">
-              <span className="text-xl font-bold mb-4">RULES</span>
+            <div className="flex flex-col space-y-1 mt-20 p-4 border-2 border-white w-96">
+              <span className="text-2xl font-bold mb-4">RULES</span>
               <span className="text-lg">1. Select the larger fraction</span>
               <span className="text-lg">2. Be fast</span>
+              <div className="flex items-center text-lg space-x-2">
+                <span>3. Use</span>
+                <img src="/misc/leftKeyWhite.png" className="w-8 h-auto" />
+                <span>and</span>
+                <img src="/misc/rightKeyWhite.png" className="w-8 h-auto" />
+                <span>to select a fraction</span>
+              </div>
+              <span className="text-lg">4. Be faster</span>
             </div>
             <div className="flex flex-1 items-center justify-center">
               <button
@@ -130,7 +197,7 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
             <span className="font-bold text-red-500 text-7xl sm:text-8xl">
               WRONG
             </span>
-            <span className="mt-2 text-base">Do better next time</span>
+            <span className="mt-2 text-base">{incorrectMessage}</span>
             <div className="mt-24">
               <button
                 type="button"

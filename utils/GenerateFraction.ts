@@ -1,6 +1,6 @@
 type Difficulty = "easy" | "hard";
 
-const getRandomInt = (max: number) => {
+export const getRandomInt = (max: number) => {
   const randomInt = Math.ceil(Math.random() * max);
   return randomInt;
 };
