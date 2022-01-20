@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTimer } from "react-timer-hook";
+
 import FractionBase from "./FractionBase";
+import TryAgain from "./TryAgain";
 
 interface Props {
   resetMode?: () => void;
@@ -19,6 +21,7 @@ const incorrectMessages = {
     "Remember, the goal of the game is to pick the LARGER fraction",
     "Don't worry, I won't tell anyone about this",
     "Maybe this game isn't for you",
+    "NANI?!",
   ],
   bad: [
     "Do better next time",
@@ -71,9 +74,10 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
   const [gameRunning, setGameRunning] = useState<boolean>(false);
   const [tryAgain, setTryAgain] = useState<boolean>(false);
   const [gameCompleted, setGameCompleted] = useState<boolean>(false);
-  const [currentStreak, setCurrentStreak] = useState<number>(0);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+  const [currentStreak, setCurrentStreak] = useState<number>(0);
+
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [incorrectMessage, setIncorrectMessage] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [nameError, setNameError] = useState<boolean>(false);
@@ -89,7 +93,6 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
 
   useEffect(() => {
     if (gameRunning) {
-      // start();
       const time = new Date();
       time.setSeconds(time.getSeconds() + 30);
       restart(time, true);
@@ -114,8 +117,6 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
     pause();
     setGameRunning(false);
     setTryAgain(true);
-
-    console.log(currentStreak);
   };
 
   const onCorrect = () => {
@@ -161,19 +162,21 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
 
       <div className="flex flex-col flex-1 items-center justify-center">
         {!gameRunning && !tryAgain && !gameCompleted && (
-          <div className="flex flex-col flex-1 items-center space-y-8 mb-16">
-            <div className="flex flex-col space-y-1 mt-20 p-4 border-2 border-white w-96">
+          <div className="flex flex-col flex-1 items-center space-y-8 mb-16 w-full">
+            <div className="flex flex-col mt-20 mx-1 sm:max-w-lg sm:w-full p-4 border-2 border-white">
               <span className="text-2xl font-bold mb-4">RULES</span>
-              <span className="text-lg">1. Select the larger fraction</span>
-              <span className="text-lg">2. Be fast</span>
-              <div className="flex items-center text-lg space-x-2">
-                <span>3. Use</span>
-                <img src="/misc/leftKeyWhite.png" className="w-8 h-auto" />
-                <span>and</span>
-                <img src="/misc/rightKeyWhite.png" className="w-8 h-auto" />
-                <span>to select a fraction</span>
+              <div className="flex flex-col space-y-1">
+                <span className="text-lg">1. Select the larger fraction</span>
+                <span className="text-lg">2. Be fast</span>
+                <div className="flex items-center text-lg space-x-2">
+                  <span>3. Use</span>
+                  <img src="/misc/leftKeyWhite.png" className="w-8 h-auto" />
+                  <span>and</span>
+                  <img src="/misc/rightKeyWhite.png" className="w-8 h-auto" />
+                  <span>to select a fraction</span>
+                </div>
+                <span className="text-lg">4. Be faster</span>
               </div>
-              <span className="text-lg">4. Be faster</span>
             </div>
             <div className="flex flex-1 items-center justify-center">
               <button
@@ -195,21 +198,7 @@ const MinuteMode: React.FC<Props> = ({ resetMode }) => {
           </div>
         )}
         {tryAgain && (
-          <div className="flex flex-col items-center">
-            <span className="font-bold text-red-500 text-7xl sm:text-8xl">
-              WRONG
-            </span>
-            <span className="mt-2 text-base">{incorrectMessage}</span>
-            <div className="mt-24">
-              <button
-                type="button"
-                onClick={startGame}
-                className="bg-gray-800 py-4 px-12 rounded-xl shadow-lg text-3xl hover:bg-opacity-80"
-              >
-                Try Again
-              </button>
-            </div>
-          </div>
+          <TryAgain incorrectMessage={incorrectMessage} startGame={startGame} />
         )}
         {gameCompleted && (
           <div className="flex flex-col items-center">

@@ -1,6 +1,5 @@
 import React from "react";
-import type { GetServerSideProps, NextPage } from "next";
-import { GetStaticProps } from "next";
+import type { GetServerSideProps } from "next";
 import Link from "next/link";
 
 import { prisma } from "../lib/prisma";
